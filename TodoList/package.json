@@ -1,0 +1,41 @@
+{
+	"name": "todo-list",
+	"description": "Task Management / To-Do List",
+	"contributors": [
+		{
+			"name": "",
+			"email": ""
+		},
+		{
+			"name": "",
+			"email": ""
+		},
+		{
+			"name": "",
+			"email": ""
+		},
+		{
+			"name": "",
+			"email": ""
+		},
+		{
+			"name": "",
+			"email": ""
+		}
+	],
+	"version": "0.0.1",
+	"dependencies": {
+		"node": "*",
+		"nodemon": "*",
+		"express": "*",
+		"ejs": "*",
+		"mongoose": "*",
+		"body-parser": "*",
+		"cookie-session": "*",
+		"passport": "*"
+	},
+	"scripts": {
+		"debug": "nodemon --env-file=server.env server.js",
+		"start": "node --env-file=server.env server.js"
+	}
+}

@@ -1,0 +1,116 @@
+<div class="todos-heading">
+	<span class="heading">To-Dos</span>
+	<span class="h-grow"></span>
+	<button class="button-undecorated" onclick="showSearchBlock()">
+		<span class="material-symbols-outlined icon">search</span>
+	</button>
+</div>
+
+<div class="divider"></div>
+
+<div id="search-block">
+	<span class="heading">Search</span>
+	<div class="divider"></div>
+
+	<form action="/search-todos" method="post" id="search"></form>
+	<table>
+		<tr>
+			<td>
+				<label for="keywords">Keywords</label>
+			</td>
+			<td colspan="2">
+				<input type="text" form="search" id="keywords" name="keywords" class="h-extended" placeholder="Enter Keywords..." />
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="schedule">Schedule</label>
+			</td>
+			<td colspan="2">
+				<select form="search" id="schedule" name="schedule" class="h-extended">
+					<option value="all">All</option>
+					<option value="scheduled">Scheduled</option>
+					<option value="not-scheduled">Not Scheduled</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="importance">Importance</label>
+			</td>
+			<td colspan="2">
+				<select form="search" id="importance" name="importance" class="h-extended">
+					<option value="all">All</option>
+					<option value="important">Important</option>
+					<option value="not-important">Not Important</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<label for="completion">Completion</label>
+			</td>
+			<td colspan="2">
+				<select form="search" id="completion" name="completion" class="h-extended">
+					<option value="all">All</option>
+					<option value="completed">Completed</option>
+					<option value="not-completed">Not Completed</option>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>
+				<input type="reset" form="search" value="Reset" class="h-extended" />
+			</td>
+			<td>
+				<input type="submit" form="search" value="Search" class="h-extended" />
+			</td>
+		</tr>
+	</table>
+</div>
+
+<div class="divider"></div>
+
+<% if (page.todos.length > 0) { %>
+	<% page.todos.forEach((ele, idx) => { %>
+		<div class="todo-item">
+			<% if (ele.completed) { %>
+				<input type="checkbox" class="todo-item-checkbox" checked />
+			<% } else { %>
+				<input type="checkbox" class="todo-item-checkbox" />
+			<% } %>
+
+			<span class="spanner"></span>
+
+			<span class="h-grow">
+				<div>
+					<% if (ele.important) { %>
+						<span class="material-symbols-outlined icon foreground-accent">priority_high</span>
+						<!-- <span class="foreground-accent">!</span> -->
+					<% } %>
+					<span><%= ele.title %></span>
+				</div>
+
+				<div class="foreground-secondary"><%= ele.description %></div>
+
+				<% if (ele.deadline) { %>
+					<div>
+						<span class="material-symbols-outlined icon">calendar_clock</span>
+						<span class="foreground-secondary"><%= ele.deadline %></span>
+					</div>
+				<% } %>
+			</span>
+		</div>
+		<% if (idx < page.todos.length - 1) { %>
+			<hr />
+		<% } %>
+	<% }); %>
+<% } else { %>
+	No To-Dos found.
+<% } %>
+
+<!-- stylesheets and javascripts -->
+<link rel="stylesheet" type="text/css" href="css/todos.css" />
+<link rel="stylesheet" type="text/css" href="css/checkboxes.css" />
+<script type="text/javascript" src="js/todos.js"></script>

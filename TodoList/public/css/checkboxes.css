@@ -1,0 +1,36 @@
+input[type=checkbox], input[type=radio] {
+	/* https://moderncss.dev/pure-css-custom-checkbox-style/ */
+	/* https://www.geeksforgeeks.org/how-to-align-checkboxes-and-their-labels-on-cross-browsers-using-css/ */
+	appearance: unset;
+	width: 30px;
+	height: 30px;
+	border: 1px solid var(--color-line);
+	border-radius: var(--border-radius-normal);
+	background-color: var(--background-color-secondary);
+	margin: 0px;
+	
+	/* override the input padding */
+	/* this also determines where the pseudo checkmark is positioned */
+	padding: 4px;
+
+	/* https://stackoverflow.com/a/69827908 */
+	flex-shrink: 0;
+}
+
+/* pseudo-element (virtual element) */
+/* https://www.w3schools.com/css/css_pseudo_elements.asp */
+input[type=checkbox]::before, input[type=radio]::before {
+	content: "";
+	background-color: var(--foreground-color-accent);
+	width: 20px;
+	height: 20px;
+	border-radius: var(--border-radius-sharp);
+	display: none;
+
+	/* checkmark */
+	/* clip-path: polygon(0% 50%, 33.3% 75%, 100% 0%, 100% 25%, 33.3% 100%, 0% 75%); */
+}
+
+input[type=checkbox]:checked::before, input[type=radio]:checked::before {
+	display: block;
+}

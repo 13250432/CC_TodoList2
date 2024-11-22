@@ -1,0 +1,166 @@
+:root {
+	--font-size-title: 35px;
+	--font-size-heading: 25px;
+	--font-size-body: 15px;
+	--font-family: 'Georgia', 'Times New Roman', serif;
+
+	--margin-normal: 15px;
+	--margin-wide: 25px;
+	--margin-narrow: 5px;
+
+	--padding-normal: 15px;
+	--padding-wide: 25px;
+	--padding-narrow: 5px;
+
+	--border-radius-normal: 10px;
+	--border-radius-round: 15px;
+	--border-radius-sharp: 5px;
+
+	--foreground-color-primary: black;
+	--foreground-color-secondary: gray;
+	--foreground-color-accent: rgb(155, 135, 135);
+	--background-color-primary: white;
+	--background-color-secondary: rgb(235, 235, 235);
+
+	--color-line: rgb(205, 205, 205);
+	--color-red: rgb(235, 135, 150);
+	--color-green: rgb(135, 235, 150);
+}
+
+body {
+	/* disable default page margins */
+	margin: 0px;
+
+	font-family: var(--font-family);
+	font-size: var(--font-size-body);
+	color: var(--foreground-color-primary);
+	background-color: rgb(120, 100, 100);
+}
+
+button {
+	color: var(--foreground-color-primary);
+	font-family: var(--font-family);
+	font-size: var(--font-size-body);
+
+	background-color: var(--background-color-secondary);
+	padding: var(--padding-narrow);
+	border: 1px solid var(--color-line);
+	border-radius: var(--border-radius-normal);
+}
+
+input {
+	appearance: unset;
+
+	color: var(--foreground-color-primary);
+	font-family: var(--font-family);
+	font-size: var(--font-size-body);
+
+	background-color: var(--background-color-secondary);
+	padding: var(--padding-narrow);
+	border: 1px solid var(--color-line);
+	border-radius: var(--border-radius-normal);
+}
+
+select {
+	appearance: unset;
+
+	color: var(--foreground-color-primary);
+	font-family: var(--font-family);
+	font-size: var(--font-size-body);
+
+	background-color: var(--background-color-secondary);
+	padding: var(--padding-narrow);
+	border: 1px solid var(--color-line);
+	border-radius: var(--border-radius-normal);
+
+	background-image: url(../images/arrow_drop_down_24dp_FFFFFF_FILL0_wght400_GRAD0_opsz24.svg);
+	background-repeat: no-repeat;
+	background-position: right;
+}
+
+form {
+	margin: 0px;
+	padding: 0px;
+}
+
+hr {
+	border: 0.5px solid var(--color-line);
+	padding: 0px;
+	margin: var(--margin-normal) 0px;
+}
+
+.nav-bar {
+	padding: var(--padding-normal) var(--padding-wide);
+	position: sticky;
+	width: 100%;
+	top: 0px;
+	background-color: var(--background-color-primary);
+	border-bottom: 1px solid var(--color-line);
+}
+
+.content {
+	padding: var(--padding-wide);
+	width: 750px;
+	background-color: var(--background-color-primary);
+	
+	/* https://developer.mozilla.org/en-US/docs/Web/CSS/box-sizing */
+	box-sizing: border-box;
+}
+
+.title {
+	font-size: var(--font-size-title);
+	color: var(--foreground-color-primary);
+}
+
+.heading {
+	font-size: var(--font-size-heading);
+	color: var(--foreground-color-primary);
+}
+
+.icon {
+	color: var(--foreground-color-secondary);
+	display: inline-block;
+
+	/* align vertically to match text */
+	vertical-align: middle;
+}
+
+.button-undecorated {
+	color: unset;
+	background-color: unset;
+
+	border: unset;
+	margin: 0px;
+	padding: 0px;
+}
+
+.divider {
+	margin: var(--margin-wide);
+}
+
+.spanner {
+	margin-left: var(--margin-normal);
+}
+
+.h-grow {
+	flex-grow: 1000;
+}
+
+.h-extended {
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.foreground-accent {
+	color: var(--foreground-color-accent);
+}
+
+.foreground-secondary {
+	color: var(--foreground-color-secondary);
+}
+
+.page-container {
+	display: flex;
+	flex-flow: row wrap;
+	justify-content: center;
+}
