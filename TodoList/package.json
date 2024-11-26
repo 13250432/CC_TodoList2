@@ -28,6 +28,7 @@
 		"node": "*",
 		"nodemon": "*",
 		"express": "*",
+		"express-session": "*",
 		"ejs": "*",
 		"mongoose": "*",
 		"body-parser": "*",

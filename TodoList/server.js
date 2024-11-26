@@ -3,10 +3,6 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 
-// require read-controller for read operations
-// https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes#create_the_catalog_route_module
-const readController = require('./controllers/read-controller');
-
 // setups
 const app = express();
 const mongoDBUri = `${process.env.MONGODB_URI}`;
@@ -25,7 +21,28 @@ app.use(express.static('public'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// #region webpage requests
+// #region webpage CREATE requests (by Akira)
+
+const createController = require('./controllers/create-controller');
+const session = require('express-session');
+
+app.use(session({
+    secret: 'SeCrEt',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }
+}));
+
+app.get('/create-todos', createController.renderCreateTodo);
+app.post('/create-todos', createController.handleCreateTodo);
+
+// #endregion webpage CREATE requests
+
+// #region webpage READ requests
+
+// require read-controller for read operations
+// https://developer.mozilla.org/en-US/docs/Learn/Server-side/Express_Nodejs/routes#create_the_catalog_route_module
+const readController = require('./controllers/read-controller');
 
 /*
 	webpage READ (GET): all todos
@@ -42,9 +59,9 @@ app.get('/todos', readController.handleWebTodos);
 */
 app.post('/search-todos', readController.handleWebTodosSearch);
 
-// #endregion webpage requests
+// #endregion webpage READ requests
 
-// #region RESTful requests
+// #region RESTful READ requests
 
 /*
 	RESTful READ (GET): all todos
@@ -136,7 +153,10 @@ app.get('/api/todos/completion/:completion?', readController.handleApiTodosCompl
 */
 app.get('/api/todos/keywords/:keywords?/schedule/:schedule?/importance/:importance?/completion/:completion?', readController.handleApiTodosSearch);
 
-// #endregion RESTful requests
+// #endregion RESTful READ requests
+
+// TODO: remove this; test only
+app.get('/', readController.testTempCreate);
 
 // handle 404 cases (webpage)
 // put this under all the request stacks

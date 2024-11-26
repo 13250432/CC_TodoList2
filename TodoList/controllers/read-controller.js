@@ -259,59 +259,53 @@ function findTodosBySearch(todos, keywords, schedule, importance, completion) {
 	});
 }
 
+// TODO: remove this; test only; use create-controller in the future
+module.exports.testTempCreate = async (req, res) => {
+	const testAccount = await accountModel.findOne({ username: 'account1' });
+	if (testAccount) {
+		console.log('testTempCreate(): account1 (test) already exist, returning');
+		res.status(200).redirect('/todos');
+		return;
+	}
 
+	const newAccount = new accountModel({
+		username: 'account1',
+		password: 'password',
+		todos: [
+			{
+				title: 'finish s381f project',
+				description: 'finish s381f project before the deadline',
+				deadline: new Date(2024, 11, 29),
+				important: true,
+				completed: false
+			},
+			{
+				title: 'search test',
+				description: 'Lorem ipsum odor amet, consectetuer adipiscing elit. Parturient potenti posuere sollicitudin vestibulum duis elit. Eleifend dignissim fames suspendisse cubilia ligula porta. Leo velit maximus facilisi efficitur maximus accumsan. Penatibus lorem phasellus vivamus iaculis tristique sodales pulvinar. Eget purus hendrerit; accumsan turpis malesuada bibendum. Malesuada proin sit mollis aptent ultricies. Eros primis vulputate felis cras ullamcorper. Consequat integer facilisis at dis placerat. Metus class arcu egestas pulvinar hendrerit vivamus mus. Curabitur tristique quis varius dignissim, est pharetra laoreet aenean sodales. Rutrum velit senectus facilisis mi est hendrerit pulvinar natoque. Sit vel blandit sollicitudin nisi ad lacus viverra. Enim dui nibh nulla quis pretium. Hendrerit ligula malesuada eget curae tempus dignissim a vulputate. Molestie risus eleifend suspendisse facilisis et id.',
+				deadline: null,
+				important: false,
+				completed: false
+			},
+			{
+				title: 'finished task',
+				description: '',
+				deadline: Date.now(),
+				important: false,
+				completed: true
+			},
+			{
+				title: 'do random stuff',
+				description: '',
+				deadline: new Date(2099, 12, 31),
+				important: true,
+				completed: false
+			}
+		]
+	});
 
+	await newAccount.validate();
+	await newAccount.save();
 
-
-
-
-
-// TODO: remove below; test only
-
-// const express = require('express');
-// const router = express.Router();
-
-// router.get('/', (req, res) => {
-// 	tempCreate();
-// 	res.status(200).end();
-// });
-
-// async function tempCreate() {
-// 	const account = new accountModel({
-// 		username: 'account1',
-// 		password: 'password',
-// 		todos: [
-// 			{
-// 				title: 'finish s381f project',
-// 				description: 'finish s381f project before the deadline',
-// 				deadline: new Date(2024, 11, 29),
-// 				important: true,
-// 				completed: false
-// 			},
-// 			{
-// 				title: 'search test',
-// 				description: 'Lorem ipsum odor amet, consectetuer adipiscing elit. Parturient potenti posuere sollicitudin vestibulum duis elit. Eleifend dignissim fames suspendisse cubilia ligula porta. Leo velit maximus facilisi efficitur maximus accumsan. Penatibus lorem phasellus vivamus iaculis tristique sodales pulvinar. Eget purus hendrerit; accumsan turpis malesuada bibendum. Malesuada proin sit mollis aptent ultricies. Eros primis vulputate felis cras ullamcorper. Consequat integer facilisis at dis placerat. Metus class arcu egestas pulvinar hendrerit vivamus mus. Curabitur tristique quis varius dignissim, est pharetra laoreet aenean sodales. Rutrum velit senectus facilisis mi est hendrerit pulvinar natoque. Sit vel blandit sollicitudin nisi ad lacus viverra. Enim dui nibh nulla quis pretium. Hendrerit ligula malesuada eget curae tempus dignissim a vulputate. Molestie risus eleifend suspendisse facilisis et id.',
-// 				deadline: null,
-// 				important: false,
-// 				completed: false
-// 			},
-// 			{
-// 				title: 'finished task',
-// 				description: '',
-// 				deadline: Date.now(),
-// 				important: false,
-// 				completed: true
-// 			},
-// 			{
-// 				title: 'do random stuff',
-// 				description: '',
-// 				deadline: new Date(2099, 12, 31),
-// 				important: true,
-// 				completed: false
-// 			}
-// 		]
-// 	});
-
-// 	await account.validate();
-// 	await account.save();
-// }
+	console.log('testTempCreate(): add account1');
+	res.status(200).redirect('/todos');
+}
