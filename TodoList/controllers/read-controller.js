@@ -8,6 +8,7 @@ module.exports.handleWebTodos = async (req, res) => {
 
 	// TODO: use username provided by authentication after it's been implemented?
 	let account = await accountModel.findOne({ username: 'account1' }).exec();
+	// let account = await accountModel.findOne({ username: req.session.username }).exec();
 
 	res.status(200).render('index', {
 		index: {
@@ -23,6 +24,7 @@ module.exports.handleWebTodos = async (req, res) => {
 module.exports.handleWebTodosSearch = async (req, res) => {
 	// TODO: use username provided by authentication after it's been implemented?
 	let account = await accountModel.findOne({ username: 'account1' }).exec();
+	// let account = await accountModel.findOne({ username: req.session.username }).exec();
 
 	let searchResult = findTodosBySearch(account.todos,
 										req.body.keywords.split(' '),
@@ -43,41 +45,54 @@ module.exports.handleWebTodosSearch = async (req, res) => {
 }
 
 module.exports.handleApiTodos = async (req, res) => {
-	// find a random account for todos
-	let account = await accountModel.findOne().exec();
+	// find all accounts for todos
+	let accounts = await accountModel.find().exec();
 
-	if (!account) {
+	if (!accounts.length) {
 		res.status(500).json({ 'error': 'no todos found' });
 		return;
 	}
 
-	res.status(200).json({ 'todos': account.todos });
+	// append each account's todos into todosResult
+	let todosResult = [];
+	accounts.forEach((ele) => {
+		todosResult.push(ele.todos);
+	});
+
+	res.status(200).json({ 'todos': todosResult });
 }
 
 module.exports.handleApiTodosKeywords = async (req, res) => {
-	// find a random account for todos
-	let account = await accountModel.findOne().exec();
+	// find all accounts for todos
+	let accounts = await accountModel.find().exec();
 
-	if (!account) {
+	// handle no todos found situation
+	if (!accounts.length) {
 		res.status(500).json({ 'error': 'no todos found' });
 		return;
 	}
 
+	// handle if keywords is empty
 	if (!req.params.keywords) {
 		res.status(500).json({ 'error': 'keywords is empty' });
 		return;
 	}
 
-	let keywordsResult = findTodosByKeywords(account.todos, req.params.keywords.split('-'));
+	// append each account's todos that match keywords into keywordsResult
+	let keywordsResult = [];
+	accounts.forEach((ele) => {
+		keywordsResult.push(findTodosByKeywords(ele.todos, req.params.keywords.split('-')));
+	});
+
 	res.status(200).json({ 'todos': keywordsResult });
 }
 
 module.exports.handleApiTodosSchedule = async (req, res) => {
-	// find a random account for todos
-	let account = await accountModel.findOne().exec();
+	// find all accounts for todos
+	let accounts = await accountModel.find().exec();
 
 	// handle no todos found situation
-	if (!account) {
+	if (!accounts.length) {
 		res.status(500).json({ 'error': 'no todos found' });
 		return;
 	}
@@ -88,16 +103,21 @@ module.exports.handleApiTodosSchedule = async (req, res) => {
 		return;
 	}
 
-	let scheduleResult = findTodosBySchedule(account.todos, req.params.schedule);
+	// append each account's todos that match schedule into scheduleResult
+	let scheduleResult = [];
+	accounts.forEach((ele) => {
+		scheduleResult.push(findTodosBySchedule(ele.todos, req.params.schedule));
+	});
+
 	res.status(200).json({ 'todos': scheduleResult });
 }
 
 module.exports.handleApiTodosImportance = async (req, res) => {
-	// find a random account for todos
-	let account = await accountModel.findOne().exec();
+	// find all accounts for todos
+	let accounts = await accountModel.find().exec();
 
 	// handle no todos found situation
-	if (!account) {
+	if (!accounts.length) {
 		res.status(500).json({ 'error': 'no todos found' });
 		return;
 	}
@@ -108,16 +128,21 @@ module.exports.handleApiTodosImportance = async (req, res) => {
 		return;
 	}
 
-	let importanceResult = findTodosByImportance(account.todos, req.params.importance);
+	// append each account's todos that match importance into importanceResult
+	let importanceResult = [];
+	accounts.forEach((ele) => {
+		importanceResult.push(findTodosByImportance(ele.todos, req.params.importance));
+	});
+
 	res.status(200).json({ 'todos': importanceResult });
 }
 
 module.exports.handleApiTodosCompletion = async (req, res) => {
-	// find a random account for todos
-	let account = await accountModel.findOne().exec();
+	// find all accounts for todos
+	let accounts = await accountModel.find().exec();
 
 	// handle no todos found situation
-	if (!account) {
+	if (!accounts) {
 		res.status(500).json({ 'error': 'no todos found' });
 		return;
 	}
@@ -128,25 +153,36 @@ module.exports.handleApiTodosCompletion = async (req, res) => {
 		return;
 	}
 
-	let completionResult = findTodosByCompletion(account.todos, req.params.completion);
+	// append each account's todos that match completion into completionResult
+	let completionResult = [];
+	accounts.forEach((ele) => {
+		completionResult.push(findTodosByCompletion(ele.todos, req.params.completion));
+	});
+
 	res.status(200).json({ 'todos': completionResult });
 }
 
 module.exports.handleApiTodosSearch = async (req, res) => {
-	// find a random account for todos
-	let account = await accountModel.findOne().exec();
+	// find all accounts for todos
+	let accounts = await accountModel.find().exec();
 
 	// handle no todos found situation
-	if (!account) {
+	if (!accounts) {
 		res.status(500).json({ 'error': 'no todos found' });
 		return;
 	}
 
-	let searchResult = findTodosBySearch(account.todos,
-										req.params.keywords.split('-'),
-										req.params.schedule,
-										req.params.importance,
-										req.params.completion);
+	// append each account's todos that match search criteria into searchResult
+	let searchResult = [];
+	accounts.forEach((ele) => {
+		searchResult.push(
+			findTodosBySearch(ele.todos,
+							req.params.keywords.split('-'),
+							req.params.schedule,
+							req.params.importance,
+							req.params.completion)
+		)
+	});
 
 	res.status(200).json({ 'todos': searchResult });
 }
