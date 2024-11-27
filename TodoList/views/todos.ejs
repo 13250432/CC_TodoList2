@@ -97,7 +97,7 @@
 				<% if (ele.deadline) { %>
 					<div>
 						<span class="material-symbols-outlined icon">calendar_clock</span>
-						<span class="foreground-secondary"><%= ele.deadline %></span>
+						<span class="foreground-secondary"><%= formatDate(ele.deadline) %></span>
 					</div>
 				<% } %>
 			</span>
@@ -109,6 +109,26 @@
 <% } else { %>
 	No To-Dos found.
 <% } %>
+
+<%
+	// returns string representation of date
+	// in a more readable format
+	function formatDate(date) {
+		if (!isFinite(date)) {
+			return date;
+		}
+
+		const day = date.getDate();
+		const month = date.getMonth();
+		const year = date.getFullYear();
+
+		// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/padStart
+		const hours = date.getHours().toString().padStart(2, 0);
+		const minutes = date.getMinutes().toString().padStart(2, 0);
+
+		return `${day}/${month}/${year} (${hours}:${minutes})`;
+	}
+%>
 
 <!-- stylesheets and javascripts -->
 <link rel="stylesheet" type="text/css" href="css/todos.css" />
