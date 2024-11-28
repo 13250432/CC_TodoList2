@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login</title>
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: #f5f5f1;
+        font-family: "Century Gothic", sans-serif;
+        color: #4a4a4a;
+      }
+
+      .container {
+        background-color: #fff;
+        padding: 3rem;
+        border-radius: 2px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 320px;
+      }
+
+      h1 {
+        font-weight: normal;
+        font-size: 1.5rem;
+        margin: 0 0 2rem;
+        text-align: center;
+        color: #2c2c2c;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      input {
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease;
+        background-color: #fafafa;
+      }
+
+      input:focus {
+        outline: none;
+        border-color: #9c9c9c;
+      }
+
+      button {
+        background-color: #847c77;
+        color: white;
+        border: none;
+        padding: 0.8rem;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 0.9rem;
+        margin-top: 0.5rem;
+        transition: background-color 0.3s ease;
+      }
+
+      button:hover {
+        background-color: #6f6862;
+      }
+
+      .link {
+        text-align: center;
+        margin-top: 1.5rem;
+      }
+
+      a {
+        color: #847c77;
+        text-decoration: none;
+        font-size: 0.9rem;
+        transition: color 0.3s ease;
+      }
+
+      a:hover {
+        color: #6f6862;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome Back</h1>
+      <form action="/login" method="POST">
+        <input type="text" name="username" placeholder="Username" required />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit">Sign In</button>
+      </form>
+      <div class="link">
+        <a href="/register">Create an account</a>
+      </div>
+    </div>
+  </body>
+</html>

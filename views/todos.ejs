@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Todo List</title>
+    <style>
+      body {
+        font-family: "Century Gothic", sans-serif;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f1;
+        color: #4a4a4a;
+      }
+
+      .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 2rem;
+      }
+
+      h1 {
+        font-weight: normal;
+        color: #2c2c2c;
+        margin: 0;
+      }
+
+      .completed {
+        text-decoration: line-through;
+        opacity: 0.7;
+      }
+
+      .important {
+        border-left: 3px solid #847c77 !important;
+        background-color: #fafaf9;
+      }
+
+      .todo-item {
+        background: white;
+        padding: 1.5rem;
+        margin: 1rem 0;
+        border-radius: 2px;
+        border: none;
+        border-left: 3px solid #ddd;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+
+      .todo-item h3 {
+        margin: 0 0 0.5rem;
+        font-weight: normal;
+        color: #2c2c2c;
+      }
+
+      .deadline {
+        color: #847c77;
+        font-size: 0.9em;
+        margin: 0.5rem 0;
+      }
+
+      .past-deadline {
+        color: #be6262;
+      }
+
+      .actions {
+        margin-top: 1rem;
+        display: flex;
+        gap: 0.5rem;
+      }
+
+      .actions form {
+        margin: 0;
+      }
+
+      .btn {
+        padding: 0.5rem 1rem;
+        border: none;
+        border-radius: 2px;
+        cursor: pointer;
+        font-size: 0.9em;
+        transition: background-color 0.3s ease;
+        background-color: #847c77;
+        color: white;
+      }
+
+      .btn:hover {
+        background-color: #6f6862;
+      }
+
+      .btn-danger {
+        background-color: #be6262;
+      }
+
+      .btn-danger:hover {
+        background-color: #a55757;
+      }
+
+      dialog {
+        padding: 0;
+        border: none;
+        border-radius: 2px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        max-width: 600px;
+        width: 100%;
+      }
+
+      dialog::backdrop {
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+
+      .dialog-content {
+        padding: 2rem;
+      }
+
+      dialog h2 {
+        margin: 0 0 1.5rem;
+        font-weight: normal;
+        color: #2c2c2c;
+      }
+
+      .form-group {
+        margin-bottom: 1rem;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #4a4a4a;
+      }
+
+      .form-group input[type="text"],
+      .form-group textarea,
+      .form-group input[type="datetime-local"] {
+        box-sizing: border-box;
+        width: 100%;
+        padding: 0.8rem;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        font-size: 0.9em;
+        background-color: #fafafa;
+        font-family: "Century Gothic", sans-serif;
+      }
+
+      .form-group input[type="text"]:focus,
+      .form-group textarea:focus,
+      .form-group input[type="datetime-local"]:focus {
+        outline: none;
+        border-color: #9c9c9c;
+      }
+
+      .dialog-actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.5rem;
+        margin-top: 1.5rem;
+      }
+
+      .checkbox-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      input[type="checkbox"] {
+        accent-color: #847c77;
+      }
+
+      .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin: 2rem 0;
+        gap: 0.5rem;
+      }
+
+      .pagination a {
+        padding: 0.5rem 1rem;
+        text-decoration: none;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        color: #847c77;
+        background: white;
+      }
+
+      .pagination a.active {
+        background-color: #847c77;
+        color: white;
+        border-color: #847c77;
+      }
+
+      .pagination a:hover:not(.active) {
+        background-color: #fafafa;
+      }
+
+      .pagination .disabled {
+        padding: 0.5rem 1rem;
+        color: #999;
+        border: 1px solid #ddd;
+        border-radius: 2px;
+        cursor: not-allowed;
+      }
+
+      .empty-state {
+        text-align: center;
+        padding: 3rem;
+        background: white;
+        border-radius: 2px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin: 2rem 0;
+        color: #847c77;
+      }
+
+      .empty-state p {
+        margin: 0;
+        font-size: 1.1em;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <h1>Todo List</h1>
+      <div>
+        <button class="btn" onclick="openNewTodoDialog()">New Todo</button>
+        <a href="/logout" class="btn">Logout</a>
+      </div>
+    </div>
+
+    <dialog id="newTodoDialog">
+      <div class="dialog-content">
+        <h2>Add New Todo</h2>
+        <form action="/todos" method="POST" id="newTodoForm">
+          <div class="form-group">
+            <label for="title">Title</label>
+            <input type="text" id="title" name="title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="description">Description</label>
+            <textarea id="description" name="description" rows="3"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="deadline">Deadline</label>
+            <input type="datetime-local" id="deadline" name="deadline" />
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="important" name="important" />
+              <label for="important">Mark as Important</label>
+            </div>
+          </div>
+
+          <div class="dialog-actions">
+            <button type="button" class="btn" onclick="closeNewTodoDialog()">
+              Cancel
+            </button>
+            <button type="submit" class="btn">Add Todo</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <dialog id="editTodoDialog">
+      <div class="dialog-content">
+        <h2>Edit Todo</h2>
+        <form id="editTodoForm" method="POST">
+          <div class="form-group">
+            <label for="editTitle">Title</label>
+            <input type="text" id="editTitle" name="title" required />
+          </div>
+
+          <div class="form-group">
+            <label for="editDescription">Description</label>
+            <textarea
+              id="editDescription"
+              name="description"
+              rows="3"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="editDeadline">Deadline</label>
+            <input type="datetime-local" id="editDeadline" name="deadline" />
+          </div>
+
+          <div class="form-group">
+            <div class="checkbox-wrapper">
+              <input type="checkbox" id="editImportant" name="important" />
+              <label for="editImportant">Mark as Important</label>
+            </div>
+          </div>
+
+          <div class="dialog-actions">
+            <button type="button" class="btn" onclick="closeEditTodoDialog()">
+              Cancel
+            </button>
+            <button type="submit" class="btn">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </dialog>
+
+    <% if (todos.length > 0) { %>
+    <div class="todo-list">
+      <% todos.forEach(todo => { %>
+      <div
+        class="todo-item <%= todo.completed ? 'completed' : '' %> <%= todo.important ? 'important' : '' %>"
+      >
+        <h3><%= todo.title %></h3>
+
+        <% if (todo.description) { %>
+        <p><%= todo.description %></p>
+        <% } %> <% if (todo.deadline) { %>
+        <p
+          class="deadline <%= new Date(todo.deadline) < new Date() ? 'past-deadline' : '' %>"
+        >
+          Deadline: <%= todo.deadline.toLocaleString() %>
+        </p>
+        <% } %>
+
+        <div class="actions">
+          <form action="/todos/<%= todo._id %>/toggle" method="POST">
+            <button type="submit" class="btn">
+              <%= todo.completed ? 'Undo' : 'Complete' %>
+            </button>
+          </form>
+
+          <form action="/todos/<%= todo._id %>/important" method="POST">
+            <button type="submit" class="btn">
+              <%= todo.important ? 'Remove Important' : 'Mark Important' %>
+            </button>
+          </form>
+
+          <button
+            class="btn"
+            onclick="openEditTodoDialog('<%= todo._id %>', '<%= todo.title %>', `<%= todo.description || '' %>`, '<%= todo.deadline ? todo.deadline.toISOString().slice(0, 16) : '' %>', <%= todo.important %>)"
+          >
+            Edit
+          </button>
+
+          <form action="/todos/<%= todo._id %>/delete" method="POST">
+            <button type="submit" class="btn btn-danger">Delete</button>
+          </form>
+        </div>
+      </div>
+      <% }); %>
+    </div>
+    <% } else { %>
+    <div class="empty-state">
+      <p>No todos yet.</p>
+    </div>
+    <% } %> <% if (totalPages > 0) { %>
+    <div class="pagination">
+      <% if (hasPrevPage) { %>
+      <a href="/todos?page=<%= prevPage %>">&laquo; Previous</a>
+      <% } else { %>
+      <span class="disabled">&laquo; Previous</span>
+      <% } %> <% for(let i = 1; i <= totalPages; i++) { %> <% if (i ===
+      currentPage) { %>
+      <a href="/todos?page=<%= i %>" class="active"><%= i %></a>
+      <% } else { %>
+      <a href="/todos?page=<%= i %>"><%= i %></a>
+      <% } %> <% } %> <% if (hasNextPage) { %>
+      <a href="/todos?page=<%= nextPage %>">Next &raquo;</a>
+      <% } else { %>
+      <span class="disabled">Next &raquo;</span>
+      <% } %>
+    </div>
+    <% } %>
+
+    <script>
+      const newDialog = document.getElementById("newTodoDialog");
+      const editDialog = document.getElementById("editTodoDialog");
+      const newTodoForm = document.getElementById("newTodoForm");
+      const editTodoForm = document.getElementById("editTodoForm");
+
+      function openNewTodoDialog() {
+        newDialog.showModal();
+      }
+
+      function closeNewTodoDialog() {
+        newDialog.close();
+        newTodoForm.reset();
+      }
+
+      function openEditTodoDialog(id, title, description, deadline, important) {
+        editTodoForm.action = `/todos/${id}/edit`;
+        document.getElementById("editTitle").value = title;
+        document.getElementById("editDescription").value = description;
+        document.getElementById("editDeadline").value = deadline;
+        document.getElementById("editImportant").checked = important;
+        editDialog.showModal();
+      }
+
+      function closeEditTodoDialog() {
+        editDialog.close();
+        editTodoForm.reset();
+      }
+
+      // Close dialogs when clicking outside
+      [newDialog, editDialog].forEach((dialog) => {
+        dialog.addEventListener("click", (e) => {
+          const dialogDimensions = dialog.getBoundingClientRect();
+          if (
+            e.clientX < dialogDimensions.left ||
+            e.clientX > dialogDimensions.right ||
+            e.clientY < dialogDimensions.top ||
+            e.clientY > dialogDimensions.bottom
+          ) {
+            dialog.close();
+            if (dialog === newDialog) {
+              newTodoForm.reset();
+            } else {
+              editTodoForm.reset();
+            }
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

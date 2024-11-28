@@ -1,0 +1,44 @@
+{
+  "name": "todo-list",
+  "description": "Task Management / To-Do List",
+  "contributors": [
+    {
+      "name": "Chan Ka Ming",
+      "email": "s1365874@live.hkmu.edu.hk"
+    },
+    {
+      "name": "Chan Wing Chung",
+      "email": "s1303541@live.hkmu.edu.hk"
+    },
+    {
+      "name": "Yeung Lai Chi",
+      "email": "s1265635@live.hkmu.edu.hk"
+    },
+    {
+      "name": "Yeung Man Ngai",
+      "email": "s1364201@live.hkmu.edu.hk"
+    },
+    {
+      "name": "Wan Cheuk Yiu",
+      "email": "s1325043@live.hkmu.edu.hk"
+    }
+  ],
+  "version": "0.0.1",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "*",
+    "cookie-session": "*",
+    "ejs": "*",
+    "express": "*",
+    "express-session": "*",
+    "mongoose": "*",
+    "node": "*",
+    "nodemon": "*",
+    "passport": "*",
+    "passport-local": "^1.0.0"
+  },
+  "scripts": {
+    "debug": "nodemon --env-file=server.env server.js",
+    "start": "node --env-file=server.env server.js"
+  }
+}
