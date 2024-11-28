@@ -84,12 +84,7 @@ app.use("/api", require("./routes/api-create"),
 // put this under all the request stacks
 app.use((req, res) => {
   console.log("404: request not found");
-  res.status(404).render("index", {
-    index: {
-      title: "404",
-      page: "not-found",
-    },
-  });
+  res.status(404).render("not-found");
 });
 
 app.listen(process.env.PORT);
