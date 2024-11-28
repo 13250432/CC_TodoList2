@@ -103,7 +103,7 @@ The Todos Page containing all user-created todos.
 
 # Cloud-Based Server URL
 
-TODO
+https://cc-todolist2.onrender.com/login
 
 # Operation Guides
 
